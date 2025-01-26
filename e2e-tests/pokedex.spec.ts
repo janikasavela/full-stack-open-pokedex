@@ -17,7 +17,7 @@ test.describe('Pokedex', () => {
 
 test.describe('Pokedex Navigation', () => {
   test('can navigate to Ivysaur page', async ({ page }) => {
-    await page.goto('http://localhost:8081')
+    await page.goto('http://localhost:8080')
 
     await page.locator('text=ivysaur').click()
 
