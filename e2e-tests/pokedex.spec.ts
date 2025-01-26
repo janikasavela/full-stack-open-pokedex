@@ -14,3 +14,13 @@ test.describe('Pokedex', () => {
     ).toBeVisible()
   })
 })
+
+test.describe('Pokedex Navigation', () => {
+  test('can navigate to Ivysaur page', async ({ page }) => {
+    await page.goto('http://localhost:8081')
+
+    await page.locator('text=ivysaur').click()
+
+    await expect(page.locator('text=chlorophyll')).toBeVisible()
+  })
+})
