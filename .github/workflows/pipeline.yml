@@ -105,9 +105,9 @@ jobs:
         if: ${{ env.skip != 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
 
       - name: Deployment Success Notification
-        uses: rjstone/discord-webhook-notify@v1
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
         if: success()
         with:
-          severity: info
-          details: Deployment Successful!
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
