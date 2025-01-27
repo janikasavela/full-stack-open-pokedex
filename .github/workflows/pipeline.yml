@@ -33,7 +33,7 @@ jobs:
 
       - name: Build Failure Notification
         uses: Ilshidur/action-discord@0.3.2
-        if: failure()
+        if: ${{ job.status == 'failure' }}
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
@@ -43,7 +43,7 @@ jobs:
             Commit: ${{ github.sha }}
             Commit message: ${{ github.event.head_commit.message }}
             Triggered by: ${{ github.actor }}
-            Error details: ${{ failure() }}
+            Error details: ${{ job.status }}
 
       - name: Run Unit Tests
         run: npm run test
