@@ -23,6 +23,18 @@ jobs:
       - run: curl --fail https://full-stack-open-pokedex-billowing-forest-165.fly.dev/health
         continue-on-error: false
 
+      - name: Check for
+        id: check_skip
+        run: |
+          SKIP=false
+          for commit in "${{ github.event.commits[@] }}"; do
+            if [[ "${commit.message}" == *"#skip"* ]]; then
+              SKIP=true
+              break
+            fi
+          done
+          echo "skip=$SKIP" >> $GITHUB_ENV
+
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@1.71.0
         env:
