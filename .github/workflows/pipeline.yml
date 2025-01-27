@@ -26,22 +26,13 @@ jobs:
         run: npm run eslint
 
       - name: Run Build
-        id: build # Assign an ID to this step
         run: npm run build
 
-      - name: Build Failure Notification
-        uses: Ilshidur/action-discord@0.3.2
-        if: ${{ steps.build.outcome == 'failure' }} # Check if the build step failed
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        with:
-          args: |
-            **Build Failed!**
-            Repository: {{ EVENT_PAYLOAD.repository.full_name }}
-            Commit: ${{ github.sha }}
-            Commit message: ${{ github.event.head_commit.message }}
-            Triggered by: ${{ github.actor }}
-            Error details: ${{ steps.build.outcome }}
+      - name: Error Notify for build
+          uses: sarisia/actions-status-discord@v1
+          if: ${{ failure() }}
+          with:
+            webhook: ${{ secrets.DISCORD_WEBHOOK }}
 
       - name: Run Unit Tests
         run: npm run test
