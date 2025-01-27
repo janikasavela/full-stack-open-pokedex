@@ -29,10 +29,10 @@ jobs:
         run: npm run build
 
       - name: Error Notify for build
-          uses: sarisia/actions-status-discord@v1
-          if: ${{ failure() }}
-          with:
-            webhook: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: sarisia/actions-status-discord@v1
+        if: ${{ failure() }}
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
 
       - name: Run Unit Tests
         run: npm run test
