@@ -12,17 +12,14 @@ jobs:
       - name: Check for skip in commit messages
         id: check_skip
         run: |
-          SKIP=false
-          # Iterate over each commit in the push event
-          for commit in "${{ github.event.commits }}"; do
-            commit_message="${commit.message}"
-            # Check if message contains #skip
-            if [[ "$commit_message" == *"#skip"* ]]; then
-              SKIP=true
-              break
-            fi
-          done
-          echo "skip=$SKIP" >> $GITHUB_ENV  # Set environment variable for later use
+          # Get all commit messages
+          COMMIT_MESSAGES="${{ github.event.commits.*.message }}"
+          # Check if any commit message contains #skip
+          if echo "$COMMIT_MESSAGES" | grep -q "#skip"; then
+            echo "skip=true" >> $GITHUB_ENV
+          else
+            echo "skip=false" >> $GITHUB_ENV
+          fi
 
       - uses: actions/checkout@v4
       - name: Set up Node.js
