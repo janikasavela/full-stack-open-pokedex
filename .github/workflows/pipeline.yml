@@ -25,10 +25,6 @@ jobs:
       - name: Check style
         run: npm run eslint
 
-      - name: Force failure for testing
-        run: exit 1
-        continue-on-error: true
-
       - name: Run Build
         run: npm run build
 

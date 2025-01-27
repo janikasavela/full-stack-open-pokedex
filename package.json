@@ -9,7 +9,7 @@
     "test": "jest",
     "eslint": "npx eslint src/**/*.js src/**/*.jsx",
     "eslint-fix": "npx eslint src/**/*.js src/**/*.jsx --fix",
-    "build": "webpack --mode production",
+    "build": "webpak --mode production",
     "test:e2e": "playwright test"
   },
   "repository": {
