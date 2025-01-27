@@ -28,6 +28,20 @@ jobs:
       - name: Run Build
         run: npm run build
 
+      - name: Build Failure Notification
+        uses: rjstone/discord-webhook-notify@v1
+        if: failure()
+        with:
+          severity: error
+          details: |
+            **Build Failed!**
+            Commit that caused the failure:
+            ```
+            ${{ github.sha }}
+            $(git log -1 --pretty=format:"%s")
+            ```
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
       - name: Run Unit Tests
         run: npm run test
 
@@ -85,7 +99,6 @@ jobs:
         if: ${{ env.skip != 'true' }}
 
       - run: curl --fail https://full-stack-open-pokedex-billowing-forest-165.fly.dev/health
-        continue-on-error: false
         if: ${{ env.skip != 'true' }}
 
       - name: Bump version and push tag
@@ -94,3 +107,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION_TYPE: patch
         if: ${{ env.skip != 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+
+      - name: Deployment Success Notification
+        uses: rjstone/discord-webhook-notify@v1
+        if: success()
+        with:
+          severity: info
+          details: Deployment Successful!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
