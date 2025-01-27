@@ -25,18 +25,25 @@ jobs:
       - name: Check style
         run: npm run eslint
 
+      - name: Force failure for testing
+        run: exit 1
+
       - name: Run Build
         run: npm run build
 
       - name: Build Failure Notification
-        uses: rjstone/discord-webhook-notify@v1
+        uses: Ilshidur/action-discord@0.3.2
         if: failure()
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          severity: error
-          details: |
+          args: |
             **Build Failed!**
-            Commit that caused the failure: ${{ github.sha }}
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+            Repository: {{ EVENT_PAYLOAD.repository.full_name }}
+            Commit: ${{ github.sha }}
+            Commit message: ${{ github.event.head_commit.message }}
+            Triggered by: ${{ github.actor }}
+            Error details: ${{ failure() }}
 
       - name: Run Unit Tests
         run: npm run test
