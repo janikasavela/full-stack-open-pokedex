@@ -1,4 +1,4 @@
-name: New Pipeline
+name: Pipeline
 
 on:
   push:
@@ -35,11 +35,7 @@ jobs:
           severity: error
           details: |
             **Build Failed!**
-            Commit that caused the failure:
-            ```
-            ${{ github.sha }}
-            $(git log -1 --pretty=format:"%s")
-            ```
+            Commit that caused the failure: ${{ github.sha }}
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
       - name: Run Unit Tests
