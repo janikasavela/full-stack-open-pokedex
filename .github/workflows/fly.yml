@@ -1,54 +1,54 @@
-name: Fly Deploy
-on:
-  push:
-    branches:
-      - main
-jobs:
-  deploy:
-    name: Deploy app
-    runs-on: ubuntu-latest
-    concurrency: deploy-group
-    steps:
-      - uses: actions/checkout@v4
+# name: Fly Deploy
+# on:
+#   push:
+#     branches:
+#       - main
+# jobs:
+#   deploy:
+#     name: Deploy app
+#     runs-on: ubuntu-latest
+#     concurrency: deploy-group
+#     steps:
+#       - uses: actions/checkout@v4
 
-      - name: Check for skip in commit messages
-        id: check_skip
-        env:
-          COMMIT_MESSAGES: ${{ join(github.event.commits.*.message, ' ') }}
-        run: |
-          echo "Commit messages: $COMMIT_MESSAGES"
-          if [[ "$COMMIT_MESSAGES" == *"#skip"* ]]; then
-            echo "skip=true" >> $GITHUB_ENV
-          else
-            echo "skip=false" >> $GITHUB_ENV
-          fi
+#       - name: Check for skip in commit messages
+#         id: check_skip
+#         env:
+#           COMMIT_MESSAGES: ${{ join(github.event.commits.*.message, ' ') }}
+#         run: |
+#           echo "Commit messages: $COMMIT_MESSAGES"
+#           if [[ "$COMMIT_MESSAGES" == *"#skip"* ]]; then
+#             echo "skip=true" >> $GITHUB_ENV
+#           else
+#             echo "skip=false" >> $GITHUB_ENV
+#           fi
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: 16
 
-      - run: npm ci
-        if: ${{ env.skip != 'true' }}
+#       - run: npm ci
+#         if: ${{ env.skip != 'true' }}
 
-      - run: npm run build
-        if: ${{ env.skip != 'true' }}
+#       - run: npm run build
+#         if: ${{ env.skip != 'true' }}
 
-      - uses: superfly/flyctl-actions/setup-flyctl@master
-        if: ${{ env.skip != 'true' }}
+#       - uses: superfly/flyctl-actions/setup-flyctl@master
+#         if: ${{ env.skip != 'true' }}
 
-      - run: flyctl deploy --remote-only
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-        if: ${{ env.skip != 'true' }}
+#       - run: flyctl deploy --remote-only
+#         env:
+#           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+#         if: ${{ env.skip != 'true' }}
 
-      - run: curl --fail https://full-stack-open-pokedex-billowing-forest-165.fly.dev/health
-        continue-on-error: false
-        if: ${{ env.skip != 'true' }}
+#       - run: curl --fail https://full-stack-open-pokedex-billowing-forest-165.fly.dev/health
+#         continue-on-error: false
+#         if: ${{ env.skip != 'true' }}
 
-      - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.71.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION_TYPE: patch
-        if: ${{ env.skip != 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main' }} # Skip tag if skip=true
+#       - name: Bump version and push tag
+#         uses: anothrNick/github-tag-action@1.71.0
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#           VERSION_TYPE: patch
+#         if: ${{ env.skip != 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
