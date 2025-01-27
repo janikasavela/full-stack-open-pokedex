@@ -9,19 +9,18 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: deploy-group
     steps:
+      - uses: actions/checkout@v4
       - name: Check for skip in commit messages
         id: check_skip
         run: |
-          # Get all commit messages
-          COMMIT_MESSAGES="${{ github.event.commits.*.message }}"
-          # Check if any commit message contains #skip
-          if echo "$COMMIT_MESSAGES" | grep -q "#skip"; then
+          COMMIT_MESSAGES="${{ join(github.event.commits.*.message, ' ') }}"
+
+          if contains(COMMIT_MESSAGES, "#skip"); then
             echo "skip=true" >> $GITHUB_ENV
           else
             echo "skip=false" >> $GITHUB_ENV
           fi
 
-      - uses: actions/checkout@v4
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
