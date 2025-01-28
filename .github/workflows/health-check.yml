@@ -1,0 +1,17 @@
+name: Periodic Health Check
+
+on:
+  push:
+    branches:
+      - main # for test
+  schedule:
+    - cron: '0 0 * * *' #once in a 24 hour
+
+jobs:
+  health-check:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Health Check Ping
+        uses: mhart/health-check-action@v1
+        with:
+          url: 'https://full-stack-open-pokedex-billowing-forest-165.fly.dev/health'
