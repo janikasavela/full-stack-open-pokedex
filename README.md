@@ -18,7 +18,7 @@ Start by running `npm install` inside the project folder
 
 - Korjasin testien ja linttauksen aiheuttamat errorit
 - Lisäsin pari simppeliä end-to-end testiä (Playwright)
-- Deployasin sovellusekn Fly.io:hon
+- Deployasin sovellusen Fly.io:hon
 - Suojasin main branchin, eli lisäsin vaatimukset: Kaikki pull requestit pitää olla hyväksyttyjä ennen mergeä ja kaikkien status tarkistusten tulee onnistua ennen mergeä
 - Tein health check workflown, joka pingaa kerran vuorokaudessa sovelluksen /health endpointiin tarkistaen että se on toiminnassa
 - Tein projektille CI/CD pipelinen, joka:
