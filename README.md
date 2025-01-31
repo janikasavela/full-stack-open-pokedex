@@ -34,3 +34,5 @@ Start by running `npm install` inside the project folder
 
 Kurssion osiossa tein myös CI/CD pipelinen toiselle kurssissä tehdylle sovellukselle, se löytyy täältä:
 https://github.com/janikasavela/Fullstack-kurssin-Backend/tree/main
+
+Ekan tehtävän teksti löytyy täältä: https://github.com/janikasavela/FullstackPalautusRepo/blob/main/Osa%2011/exercise1.txt
